@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
-export default function TrainActions({ trainId}) {
+export default function TrainActions({ trainId} : {trainId : number}) {
     const [isDeleting, setIsDeleting] = useState(false);
 
     const handleDelete = async () => {

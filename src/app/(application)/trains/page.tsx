@@ -16,7 +16,7 @@ export default async function TrainsPage() {
         }
 
         trains = await response.json();
-    } catch (err) {
+    } catch (err : any) {
         console.error("Failed to fetch trains:", err);
         error = err.message;
     }
@@ -84,7 +84,7 @@ export default async function TrainsPage() {
                     </div>
                 ) : (
                     <div className="grid gap-6">
-                        {trains.map((train) => (
+                        {trains.map((train : any) => (
                             <div key={train.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                                 <div className="p-6">
                                     <div className="flex justify-between items-center">
