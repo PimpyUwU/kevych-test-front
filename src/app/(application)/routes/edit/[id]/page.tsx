@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import RouteForm from '@/components/routes/RouteForm';
 
-interface EditRoutePageProps {
+interface PageProps {
     params: {
         id: string;
     };
 }
 
-export default function EditRoutePage({ params }: EditRoutePageProps) {
+export default function EditRoutePage({ params }: PageProps) {
     const [routeId, setRouteId] = useState<number | null>(null);
 
     useEffect(() => {
@@ -17,6 +17,7 @@ export default function EditRoutePage({ params }: EditRoutePageProps) {
             setRouteId(parseInt(params.id, 10));
         }
     }, [params.id]);
+
 
     if (routeId === null) {
         return <div>Loading...</div>;
