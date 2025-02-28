@@ -8,7 +8,7 @@ export default function TrainsPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Function to refetch the trains from the API
+
     const fetchTrains = async () => {
         setLoading(true);
         try {
