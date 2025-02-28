@@ -35,7 +35,7 @@ export default function TrainsPage() {
     }, []);
 
     const handleDeleteTrain = (trainId: number) => {
-        setTrains((prevTrains) => prevTrains.filter((train) => train.id !== trainId));
+        setTrains((prevTrains) => prevTrains.filter((train : any) => train.id !== trainId));
     };
 
     return (
@@ -105,7 +105,7 @@ export default function TrainsPage() {
                     </div>
                 ) : (
                     <div className="grid gap-6">
-                        {trains.map((train) => (
+                        {trains.map((train : any) => (
                             <div key={train.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                                 <div className="p-6">
                                     <div className="flex justify-between items-center">
