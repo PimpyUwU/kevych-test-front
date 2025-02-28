@@ -3,12 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import RouteForm from '@/components/routes/RouteForm';
 
-export default function EditRoutePage({
-                                          params
-                                      }: {
-    params: { id: string }
-}) {
-    const [routeId, setRouteId] = useState<number | null>(null);
+export default function EditRoutePage({ params } : any) {
+    const [routeId, setRouteId] = useState(null);
 
     useEffect(() => {
         if (params.id) {
