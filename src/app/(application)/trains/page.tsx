@@ -1,25 +1,42 @@
+"use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import TrainActions from "./TrainActions"; // We'll create this client component for interactive elements
+import TrainActions from "./TrainActions"; // Import the TrainActions component
 
-export default async function TrainsPage() {
-    let trains = [];
-    let error = null;
+export default function TrainsPage() {
+    const [trains, setTrains] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/train`, {
-            method: "GET",
-            cache: 'no-store'
-        });
+    // Function to refetch the trains from the API
+    const fetchTrains = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/train`, {
+                method: "GET",
+            });
 
-        if (!response.ok) {
-            throw new Error(`Error fetching trains: ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`Error fetching trains: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setTrains(data);
+            setLoading(false);
+        } catch (err) {
+            console.error("Failed to fetch trains:", err);
+            setError(err.message);
+            setLoading(false);
         }
+    };
 
-        trains = await response.json();
-    } catch (err : any) {
-        console.error("Failed to fetch trains:", err);
-        error = err.message;
-    }
+    useEffect(() => {
+        fetchTrains();
+    }, []);
+
+    const handleDeleteTrain = (trainId: number) => {
+        setTrains((prevTrains) => prevTrains.filter((train) => train.id !== trainId));
+    };
 
     return (
         <div className="min-h-screen bg-gray-50 px-4 py-8">
@@ -42,7 +59,7 @@ export default async function TrainsPage() {
 
                 <div className="mb-6 flex justify-between items-center">
                     <div className="text-lg font-medium text-gray-700">
-                        Total Trains: {trains.length}
+                        {loading ? "Loading trains..." : `Total Trains: ${trains.length}`}
                     </div>
                     <Link href="/trains/add"
                           className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors duration-200">
@@ -70,7 +87,11 @@ export default async function TrainsPage() {
                     </div>
                 )}
 
-                {trains.length === 0 && !error ? (
+                {loading ? (
+                    <div className="flex justify-center my-12">
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+                    </div>
+                ) : trains.length === 0 ? (
                     <div className="bg-white rounded-lg shadow-md p-8 text-center">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
@@ -84,7 +105,7 @@ export default async function TrainsPage() {
                     </div>
                 ) : (
                     <div className="grid gap-6">
-                        {trains.map((train : any) => (
+                        {trains.map((train) => (
                             <div key={train.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
                                 <div className="p-6">
                                     <div className="flex justify-between items-center">
@@ -92,7 +113,10 @@ export default async function TrainsPage() {
                                             <h2 className="text-xl font-bold text-gray-800">{train.name}</h2>
                                             <p className="text-gray-500 mt-1">Train ID: {train.id}</p>
                                         </div>
-                                        <TrainActions trainId={train.id} />
+                                        <TrainActions
+                                            trainId={train.id}
+                                            onDelete={() => handleDeleteTrain(train.id)}
+                                        />
                                     </div>
                                 </div>
                             </div>

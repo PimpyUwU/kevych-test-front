@@ -5,7 +5,8 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-export default function LoginForm() {
+export default function SignUpForm() {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -18,19 +19,18 @@ export default function LoginForm() {
         setError("");
 
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-                { email, password },
+            await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+                { name, email, password },
                 { withCredentials: true }
             );
 
-            router.push("/");
-            router.refresh();
+            router.push("/login");
         } catch (err) {
-            console.error("Login error:", err);
+            console.error("Sign up error:", err);
             setError(
                 axios.isAxiosError(err) && err.response
-                    ? err.response.data.message || "Invalid credentials"
-                    : "An error occurred during login"
+                    ? err.response.data.message || "An error occurred"
+                    : "An error occurred during sign up"
             );
         } finally {
             setLoading(false);
@@ -48,6 +48,19 @@ export default function LoginForm() {
             <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                     <label className="block text-sm font-medium text-gray-700">
+                        Name
+                    </label>
+                    <input
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700">
                         Email address
                     </label>
                     <input
@@ -55,7 +68,7 @@ export default function LoginForm() {
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black" // Added text-black class
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
                     />
                 </div>
 
@@ -68,7 +81,7 @@ export default function LoginForm() {
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black" // Added text-black class
+                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-black"
                     />
                 </div>
 
@@ -79,7 +92,7 @@ export default function LoginForm() {
                         loading ? "opacity-70 cursor-not-allowed" : ""
                     }`}
                 >
-                    {loading ? "Signing in..." : "Sign in"}
+                    {loading ? "Signing up..." : "Sign up"}
                 </button>
             </form>
         </>
