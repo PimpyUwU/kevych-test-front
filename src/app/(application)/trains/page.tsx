@@ -23,7 +23,7 @@ export default function TrainsPage() {
             const data = await response.json();
             setTrains(data);
             setLoading(false);
-        } catch (err) {
+        } catch (err : any) {
             console.error("Failed to fetch trains:", err);
             setError(err.message);
             setLoading(false);
