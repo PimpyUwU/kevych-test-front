@@ -18,7 +18,6 @@ export default function EditRoutePage({ params }: EditRoutePageProps) {
         }
     }, [params.id]);
 
-
     if (routeId === null) {
         return <div>Loading...</div>;
     }
