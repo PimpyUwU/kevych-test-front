@@ -22,3 +22,50 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+textarea,
+select {
+  @apply text-gray-900;  /* Dark text for better readability */
+  @apply bg-white;
+  @apply border border-gray-300;
+  @apply rounded-md;
+  @apply p-2;
+  @apply focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500;
+  @apply outline-none;
+}
+
+/* Placeholder styling */
+::placeholder {
+  @apply text-gray-500;
+  @apply opacity-70;
+}
+
+/* Ensure text remains visible during input */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #1f2937; /* dark gray-900 */
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Optional: Style for form elements when they're disabled */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  @apply bg-gray-100;
+  @apply cursor-not-allowed;
+  @apply opacity-75;
+}

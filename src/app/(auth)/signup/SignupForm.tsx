@@ -24,7 +24,7 @@ export default function SignUpForm() {
                 { withCredentials: true }
             );
 
-            router.push("/login");
+            router.push("/");
         } catch (err) {
             console.error("Sign up error:", err);
             setError(
