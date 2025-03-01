@@ -10,6 +10,9 @@ import Button from '@/components/ui/Button';
 import { useRoutes } from '@/hooks/useRoutes';
 import { useSorting } from '@/hooks/useSorting';
 import { RouteFilters as RouteFiltersType } from '@/types';
+import {LoadingSpinner} from "@/components/ui/LoadingSpinner";
+import {ErrorAlert} from "@/components/ui/ErrorAlert";
+
 
 export default function RouteList() {
     const searchParams = useSearchParams();
@@ -25,12 +28,14 @@ export default function RouteList() {
     const { sortOptions, updateSort } = useSorting('date', 'asc');
     const { routes, loading, error, removeRoute, filterRoutes, sortRoutes } = useRoutes();
 
-    // Apply filters and sorting
+
     const filteredRoutes = filterRoutes(routes, filters);
     const sortedRoutes = sortRoutes(filteredRoutes, sortOptions);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div className="text-red-500">{error}</div>;
+    if (loading)
+        return <LoadingSpinner/>;
+    if (error)
+        return <ErrorAlert message={error}/>;
 
     return (
         <div>

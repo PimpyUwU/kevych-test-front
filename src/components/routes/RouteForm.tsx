@@ -7,6 +7,7 @@ import { Train } from '@/models/Train';
 import { Station } from '@/models/Station';
 import { createRoute, updateRoute, fetchRoute } from '@/lib/api';
 import api from '@/lib/axiosWithRefresh'
+import {LoadingSpinner} from "@/components/ui/LoadingSpinner";
 
 interface RouteFormProps {
     routeId?: number;
@@ -104,7 +105,8 @@ export default function RouteForm({ routeId, isEditing = false }: RouteFormProps
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading)
+        return <LoadingSpinner/>;
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-md">

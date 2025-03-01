@@ -1,16 +1,18 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React, {use, useEffect, useState} from 'react';
 import RouteForm from '@/components/routes/RouteForm';
 
 export default function EditRoutePage({ params } : any) {
     const [routeId, setRouteId] = useState<number | null>(null);
 
+    const unwrappedParams = use(params as unknown as Promise<{ id: string }>);
+
     useEffect(() => {
-        if (params.id) {
-            setRouteId(parseInt(params.id, 10));
+        if (unwrappedParams) {
+            setRouteId(parseInt(unwrappedParams.id, 10));
         }
-    }, [params.id]);
+    }, [unwrappedParams.id]);
 
     if (routeId === null) {
         return <div>Loading...</div>;

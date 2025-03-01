@@ -8,9 +8,7 @@ const api: AxiosInstance = axios.create({
     },
 });
 
-
 let isRefreshing = false;
-
 let refreshSubscribers: (() => void)[] = [];
 
 const subscribeToTokenRefresh = (callback: () => void) => {
@@ -24,10 +22,15 @@ const onTokenRefreshed = () => {
 
 const refreshToken = async (): Promise<void> => {
     try {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
+        await axios({
+            method: 'post',
+            url: `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
             withCredentials: true,
         });
+
+        console.log('Token refresh successful');
     } catch (error) {
+        console.error('Token refresh failed:', error);
         if (typeof window !== 'undefined') {
             window.location.href = '/login';
         }
@@ -43,27 +46,30 @@ api.interceptors.response.use(
         const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
 
         if (error.response?.status === 401 && !originalRequest._retry) {
+            console.log('Received 401 error, attempting to refresh token');
+            originalRequest._retry = true;
+
             if (!isRefreshing) {
                 isRefreshing = true;
-                originalRequest._retry = true;
 
                 try {
                     await refreshToken();
-
+                    console.log('Token refreshed, retrying original request');
 
                     onTokenRefreshed();
                     isRefreshing = false;
 
                     return api(originalRequest);
                 } catch (refreshError) {
-                    // Handle failed refresh
+                    console.error('Token refresh failed in interceptor:', refreshError);
                     isRefreshing = false;
                     return Promise.reject(refreshError);
                 }
             } else {
+                console.log('Token refresh already in progress, queuing request');
                 return new Promise((resolve) => {
                     subscribeToTokenRefresh(() => {
-                        // Simply retry with the updated cookie
+                        console.log('Executing queued request after token refresh');
                         resolve(api(originalRequest));
                     });
                 });

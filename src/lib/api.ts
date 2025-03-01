@@ -1,12 +1,8 @@
-import axios from "axios"
+import api from "./axiosWithRefresh"
 import {Route} from '@/models/Route'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const axiosInstance = axios.create({
-    baseURL: API_URL,
-    withCredentials: true,
-});
+const axiosInstance = api
 
 
 export async function fetchRoutes(): Promise<Route[]> {

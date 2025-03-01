@@ -1,6 +1,8 @@
 import { Station } from '@/models/Station';
 import { StationCard } from './StationCard';
 import Link from 'next/link';
+import {LoadingSpinner} from "@/components/ui/LoadingSpinner";
+import {ErrorAlert} from "@/components/ui/ErrorAlert";
 
 interface StationListProps {
     stations: Station[];
@@ -17,17 +19,13 @@ export const StationList: React.FC<StationListProps> = ({
                                                         }) => {
     if (loading) {
         return (
-            <div className="flex justify-center my-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
-            </div>
+            <LoadingSpinner/>
         );
     }
 
     if (error) {
         return (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-                <p className="text-sm text-red-700">Failed to load stations: {error}</p>
-            </div>
+            <ErrorAlert message={error}></ErrorAlert>
         );
     }
 

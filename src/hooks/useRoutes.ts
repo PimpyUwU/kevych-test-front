@@ -27,8 +27,8 @@ export function useRoutes() {
             try {
                 await deleteRoute(id);
                 setRoutes(routes.filter(route => route.id !== id));
-            } catch (err) {
-                alert('You must be authorized');
+            } catch (err : any) {
+                setError(err)
                 console.error('Error deleting route:', err);
             }
         }
@@ -36,15 +36,13 @@ export function useRoutes() {
 
     const filterRoutes = (routes: Route[], filters: RouteFilters) => {
         return routes.filter(route => {
-            // Filter by station_id if available
             if (filters.stationId && route.station.id !== filters.stationId) {
                 return false;
             }
-            // Filter by train_id if available
+
             if (filters.trainId && route.train.id !== filters.trainId) {
                 return false;
             }
-            // Filter by search term
             if (filters.search) {
                 const searchTerm = filters.search.toLowerCase();
                 return route.train.name.toLowerCase().includes(searchTerm) ||
